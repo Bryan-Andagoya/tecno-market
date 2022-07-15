@@ -54,7 +54,13 @@ export const AuthStackNavigator = () => {
               title: '',
             }}
           />
-          <AuthStack.Screen name="Register" component={RegisterScreen} />
+          <AuthStack.Screen
+            name="Register"
+            component={RegisterScreen}
+            options={{
+              title: '',
+            }}
+          />
         </>
       )}
     </AuthStack.Navigator>

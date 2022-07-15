@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
     // backgroundColor: 'coral',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 5,
   },
   headerText: {
     // backgroundColor: 'antiquewhite',
@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     // backgroundColor: 'chartreuse',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 5,
   },
   logo: {
     // backgroundColor: 'deeppink',
@@ -41,8 +41,13 @@ export const styles = StyleSheet.create({
   },
   buttonsContainer: {
     // backgroundColor: 'gold',
-    paddingBottom: 15,
-    paddingTop: 15,
+    // paddingBottom: 15,
+    paddingTop: 5,
+    flex: 2.5,
+    flexGrow: 1 / 5,
+    flexBasis: 115,
+    // flexGrow: 0,
+    justifyContent: 'center',
   },
   buttonContainer: {
     padding: 5,
