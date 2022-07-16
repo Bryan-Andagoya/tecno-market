@@ -1,7 +1,6 @@
 import { ActivityIndicator, Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import React from 'react';
 import { styles } from './style';
-import { colors } from 'app/styles';
 
 interface Props extends TouchableOpacityProps {
   text: string;

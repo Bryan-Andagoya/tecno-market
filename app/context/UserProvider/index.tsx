@@ -49,7 +49,7 @@ export const UserProvider = ({ children }: Props) => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
       setUser(user);
       state.initializing && setInitializing(false);
-      state.loading && setLoading(false);
+      setLoading(false);
     });
 
     return () => {

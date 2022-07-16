@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "tecno-market",
+    "name": "Tecno Market",
     "slug": "tecno-market",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,16 +16,21 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.itsqmet.tecnomarket",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#61DAFB"
-      }
+      },
+      "package": "com.itsqmet.tecnomarket",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "scheme": "com.itsqmet.tecnomarket"
   }
 }

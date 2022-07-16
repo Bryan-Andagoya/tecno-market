@@ -8,21 +8,33 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { styles } from './style';
 import { FacebookLogoImage, GoogleLogoImage, LogoImage } from 'app/images';
 import { InputComponent, PrimaryButtonComponent } from 'app/components';
 import * as Animatable from 'react-native-animatable';
 import * as Yup from 'yup';
 import { FormikProps, useFormik } from 'formik';
-import { signInWithEmailAndPassword, AuthError } from 'firebase/auth';
+import {
+  signInWithEmailAndPassword,
+  AuthError,
+  sendPasswordResetEmail,
+  FacebookAuthProvider,
+  signInWithCredential,
+  GoogleAuthProvider,
+} from 'firebase/auth';
 import { auth } from 'app/config';
 import { UserContext } from 'app/context';
+import * as Facebook from 'expo-facebook';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
 
 interface Values {
   email: string;
   password: string;
 }
+
+WebBrowser.maybeCompleteAuthSession();
 
 export const LoginScreen = () => {
   const [keyboardShown, setKeyboardShown] = useState<boolean>(false);
@@ -30,6 +42,10 @@ export const LoginScreen = () => {
   const emailRef = useRef<Animatable.View & View>(null);
   const passwordRef = useRef<Animatable.View & View>(null);
   const { loading, setLoading } = useContext(UserContext);
+
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    clientId: '777187985018-2in1d31nu67oeqgkd1hie2ksr9ddu7au.apps.googleusercontent.com',
+  });
 
   const formik: FormikProps<Values> = useFormik<Values>({
     initialValues: {
@@ -48,29 +64,50 @@ export const LoginScreen = () => {
         await signInWithEmailAndPassword(auth, email, password);
       } catch (error) {
         let errorCode = (error as AuthError).code;
+        let errorMessage: string;
 
         switch (errorCode) {
           case 'auth/invalid-email':
-            Alert.alert('¡Algo salió mal!', 'Correo electrónico inválido');
+            errorMessage = 'Correo electrónico inválido.';
             break;
           case 'auth/user-disabled':
-            Alert.alert('¡Algo salió mal!', 'Usuario deshabilitado');
+            errorMessage = 'Usuario deshabilitado.';
             break;
           case 'auth/user-not-found':
-            Alert.alert('¡Algo salió mal!', 'Usuario no encontrado');
+            errorMessage = 'Usuario no encontrado.';
             break;
           case 'auth/wrong-password':
-            Alert.alert('¡Algo salió mal!', 'Contraseña incorrecta');
+            errorMessage = 'Contraseña incorrecta.';
             break;
           default:
-            Alert.alert('¡Algo salió mal!', 'Error al iniciar sisión, inténtelo más tarde');
+            errorMessage = 'Error al iniciar sisión, inténtelo más tarde.';
             break;
         }
+
+        Alert.alert('¡Algo salió mal!', errorMessage);
 
         setLoading(false);
       }
     },
   });
+
+  useEffect(() => {
+    const logInWithGoogle = async () => {
+      try {
+        if (response?.type === 'success') {
+          const { id_token } = response.params;
+          const credential = GoogleAuthProvider.credential(id_token);
+          await signInWithCredential(auth, credential);
+        }
+      } catch (error) {
+        Alert.alert('¡Algo salió mal!', 'Error al iniciar sesión con Google');
+      }
+
+      setLoading(false);
+    };
+
+    logInWithGoogle();
+  }, [response]);
 
   useLayoutEffect(() => {
     const showSubscription: EmitterSubscription = Keyboard.addListener(
@@ -105,8 +142,93 @@ export const LoginScreen = () => {
     formik.submitForm();
   };
 
-  const handleFacebookButtonPress = () => {};
-  const handleGoogleButtonPress = () => {};
+  const sendEmailToResetPassword = async () => {
+    if (formik.errors.email) {
+      emailRef.current?.tada?.();
+    } else {
+      let email = formik.values.email;
+
+      if (email) {
+        setLoading(true);
+
+        try {
+          await sendPasswordResetEmail(auth, email);
+          Alert.alert(
+            '¡Éxito!',
+            'Hemos enviado un enlace para restablecer su contraseña a su correo electrónico'
+          );
+        } catch (error) {
+          let errorCode = (error as AuthError).code;
+          let errorMessage: string;
+
+          switch (errorCode) {
+            case 'auth/invalid-email':
+              errorMessage = 'Correo electrónico inválido.';
+              break;
+            case 'auth/missing-android-pkg-name':
+              errorMessage =
+                'Se debe proporcionar un nombre de paquete de Android si se requiere instalar la aplicación de Android.';
+              break;
+            case 'auth/missing-continue-uri':
+              errorMessage = 'Se debe proporcionar una URL de continuación en la solicitud.';
+              break;
+            case 'auth/missing-ios-bundle-id':
+              errorMessage =
+                'Se debe proporcionar un ID de paquete de iOS si se proporciona un ID de App Store.';
+              break;
+            case 'auth/invalid-continue-uri':
+              errorMessage = 'La URL de continuación proporcionada en la solicitud no es válida.';
+              break;
+            case 'auth/unauthorized-continue-uri':
+              errorMessage =
+                'El dominio de la URL de continuación no está en la lista blanca. Incluya el dominio en la lista blanca en Firebase console.';
+              break;
+            case 'auth/user-not-found':
+              errorMessage = 'Usuario no encontrado.';
+              break;
+            default:
+              errorMessage = 'Error al restablecer la contraseña, inténtelo más tarde.';
+              break;
+          }
+
+          Alert.alert('¡Algo salió mal!', errorMessage);
+        }
+
+        setLoading(false);
+      } else {
+        formik.setFieldTouched('email', true, true);
+      }
+    }
+  };
+
+  const handleFacebookButtonPress = async () => {
+    try {
+      setLoading(true);
+
+      await Facebook.initializeAsync({
+        appId: '1102507887009979',
+      });
+
+      const loginResult = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ['public_profile', 'email'],
+      });
+
+      if (loginResult.type === 'success') {
+        const credential = FacebookAuthProvider.credential(loginResult.token);
+
+        await signInWithCredential(auth, credential);
+      }
+    } catch (error) {
+      Alert.alert('¡Algo salió mal!', 'Error al iniciar sesión con Facebook');
+    }
+
+    setLoading(false);
+  };
+
+  const handleGoogleButtonPress = () => {
+    setLoading(true);
+    promptAsync();
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -157,7 +279,7 @@ export const LoginScreen = () => {
           <PrimaryButtonComponent text="Iniciar sesión" onPress={handleSubmit} loading={loading} />
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => console.log('hello')} disabled={loading}>
+          <TouchableOpacity onPress={sendEmailToResetPassword} disabled={loading}>
             <Text style={styles.buttonText}>Olvidé mi contraseña</Text>
           </TouchableOpacity>
         </View>
