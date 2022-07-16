@@ -5,6 +5,7 @@ import {
   TextInput,
   TextInputAndroidProps,
   TextInputIOSProps,
+  TextInputProps,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -27,6 +28,7 @@ interface Props {
   autoComplete?: TextInputAndroidProps['autoComplete'];
   textContentType?: TextInputIOSProps['textContentType'];
   keyboardType?: KeyboardTypeOptions;
+  autoCapitalize?: TextInputProps['autoCapitalize'];
 }
 
 export const InputComponent = forwardRef(
@@ -43,6 +45,7 @@ export const InputComponent = forwardRef(
       autoComplete,
       textContentType,
       keyboardType,
+      autoCapitalize,
     }: Props,
     inputRef: ForwardedRef<Animatable.View & View>
   ) => {
@@ -66,6 +69,7 @@ export const InputComponent = forwardRef(
               }
               keyboardType={keyboardType || undefined}
               blurOnSubmit={true}
+              autoCapitalize={autoCapitalize || 'none'}
             />
           </Animatable.View>
           {variant === 'password' && (
