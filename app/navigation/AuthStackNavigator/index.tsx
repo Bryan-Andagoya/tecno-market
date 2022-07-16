@@ -1,10 +1,11 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { UserContext } from 'app/context';
-import { HomeScreen, LoginScreen, RegisterScreen, WelcomeScreen } from 'app/screens';
+import { LoginScreen, RegisterScreen, WelcomeScreen } from 'app/screens';
 import { colors } from 'app/styles';
 import React, { useContext } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { MainDrawerNavigator } from '../MainDrawerNavigator';
 import { styles } from './style';
 
 export type AuthStackParamList = {
@@ -37,7 +38,11 @@ export const AuthStackNavigator = () => {
         },
       }}>
       {user ? (
-        <AuthStack.Screen name="MainDrawer" component={HomeScreen} />
+        <AuthStack.Screen
+          name="MainDrawer"
+          component={MainDrawerNavigator}
+          options={{ headerShown: false }}
+        />
       ) : (
         <>
           <AuthStack.Screen
