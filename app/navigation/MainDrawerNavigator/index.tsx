@@ -20,7 +20,6 @@ import {
   BellFA5Icon,
   CogFA5Icon,
   CommentDotsFA5Icon,
-  EyeFAIcon,
   HeartFA5Icon,
   HomeFA5Icon,
   ListFA5Icon,
@@ -29,7 +28,7 @@ import {
   TagFA5Icon,
 } from 'app/icons';
 import { View } from 'react-native-animatable';
-import { Text } from 'react-native';
+import { DrawerContentComponent } from './components';
 
 export type MainDrawerParamList = {
   Home: undefined;
@@ -51,6 +50,7 @@ export const MainDrawerNavigator = () => {
   return (
     <MainDrawer.Navigator
       initialRouteName="Home"
+      backBehavior="history"
       screenOptions={{
         drawerActiveTintColor: colors.PRIMARY,
         drawerInactiveTintColor: 'black',
@@ -58,7 +58,8 @@ export const MainDrawerNavigator = () => {
         sceneContainerStyle: {
           backgroundColor: 'white',
         },
-      }}>
+      }}
+      drawerContent={(props) => <DrawerContentComponent {...props} />}>
       <MainDrawer.Screen
         name="Home"
         component={HomeScreen}

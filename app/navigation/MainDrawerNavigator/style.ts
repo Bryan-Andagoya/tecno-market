@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   drawerLabelStyle: {
     // backgroundColor: 'gold',
-    fontSize: 18,
+    fontSize: 17,
     left: -15,
   },
   iconContainer: {

@@ -1,0 +1,1 @@
+export { DrawerContentComponent } from './DrawerContentComponent';

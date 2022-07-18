@@ -31,6 +31,15 @@
     "web": {
       "favicon": "./assets/images/favicon.png"
     },
-    "scheme": "com.itsqmet.tecnomarket"
+    "scheme": "com.itsqmet.tecnomarket",
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permita que $(PRODUCT_NAME) acceda a sus fotos",
+          "cameraPermission": "Permita que $(PRODUCT_NAME) acceda a su cámara"
+        }
+      ]
+    ]
   }
 }

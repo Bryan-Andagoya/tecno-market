@@ -10,3 +10,4 @@ export { AddressCardFA5Icon } from './AddressCardFA5Icon';
 export { CommentDotsFA5Icon } from './CommentDotsFA5Icon';
 export { CogFA5Icon } from './CogFA5Icon';
 export { QuestionCircleFA5Icon } from './QuestionCircleFA5Icon';
+export { UserPlusFA5Icon } from './UserPlusFA5Icon';
