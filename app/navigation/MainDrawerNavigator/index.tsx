@@ -29,6 +29,8 @@ import {
 } from 'app/icons';
 import { View } from 'react-native-animatable';
 import { DrawerContentComponent } from './components';
+import { ScreenHeaderComponent } from 'app/components';
+import { CartButtonComponent, SearchBarComponent } from 'app/screens/HomeScreen/components';
 
 export type MainDrawerParamList = {
   Home: undefined;
@@ -70,6 +72,13 @@ export const MainDrawerNavigator = () => {
               <HomeFA5Icon size={size} color={color} />
             </View>
           ),
+          header: (props) => (
+            <ScreenHeaderComponent
+              {...props}
+              centerComponent={() => <SearchBarComponent />}
+              rightComponent={() => <CartButtonComponent />}
+            />
+          ),
         }}
       />
       <MainDrawer.Screen
@@ -82,6 +91,7 @@ export const MainDrawerNavigator = () => {
               <BellFA5Icon size={size} color={color} />
             </View>
           ),
+          header: (props) => <ScreenHeaderComponent {...props} title="Notificaciones" />,
         }}
       />
       <MainDrawer.Screen
@@ -94,6 +104,7 @@ export const MainDrawerNavigator = () => {
               <ShoppingBagFA5Icon size={size} color={color} />
             </View>
           ),
+          header: (props) => <ScreenHeaderComponent {...props} title="Mis compras" />,
         }}
       />
       <MainDrawer.Screen
@@ -106,6 +117,7 @@ export const MainDrawerNavigator = () => {
               <HeartFA5Icon size={size} color={color} />
             </View>
           ),
+          header: (props) => <ScreenHeaderComponent {...props} title="Favoritos" />,
         }}
       />
       <MainDrawer.Screen
@@ -118,6 +130,7 @@ export const MainDrawerNavigator = () => {
               <TagFA5Icon size={size} color={color} />
             </View>
           ),
+          header: (props) => <ScreenHeaderComponent {...props} title="Ofertas" />,
         }}
       />
       <MainDrawer.Screen
@@ -130,6 +143,7 @@ export const MainDrawerNavigator = () => {
               <ListFA5Icon size={size} color={color} />
             </View>
           ),
+          header: (props) => <ScreenHeaderComponent {...props} title="Categorias" />,
         }}
       />
       <MainDrawer.Screen
@@ -142,6 +156,7 @@ export const MainDrawerNavigator = () => {
               <AddressCardFA5Icon size={size} color={color} />
             </View>
           ),
+          header: (props) => <ScreenHeaderComponent {...props} title="Perfil" />,
         }}
       />
       <MainDrawer.Screen
@@ -154,6 +169,7 @@ export const MainDrawerNavigator = () => {
               <CommentDotsFA5Icon size={size} color={color} />
             </View>
           ),
+          header: (props) => <ScreenHeaderComponent {...props} title="Contactos" />,
         }}
       />
       <MainDrawer.Screen
@@ -166,6 +182,7 @@ export const MainDrawerNavigator = () => {
               <CogFA5Icon size={size} color={color} />
             </View>
           ),
+          header: (props) => <ScreenHeaderComponent {...props} title="Ajustes" />,
         }}
       />
       <MainDrawer.Screen
@@ -178,6 +195,7 @@ export const MainDrawerNavigator = () => {
               <QuestionCircleFA5Icon size={size} color={color} />
             </View>
           ),
+          header: (props) => <ScreenHeaderComponent {...props} title="Ayuda" />,
         }}
       />
       <MainDrawer.Screen
@@ -187,6 +205,7 @@ export const MainDrawerNavigator = () => {
           drawerLabel: 'Acerca de Tecno Market',
           drawerLabelStyle: [styles.drawerLabelStyle, { left: 0 }],
           drawerItemStyle: styles.aboutUs,
+          header: (props) => <ScreenHeaderComponent {...props} title="Nuestro Equipo" />,
         }}
       />
     </MainDrawer.Navigator>
