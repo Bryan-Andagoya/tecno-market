@@ -15,3 +15,8 @@ export { UserPlusFA5Icon } from './UserPlusFA5Icon';
 export { BarsFA5Icon } from './BarsFA5Icon';
 export { ShoppingCartFA5Icon } from './ShoppingCartFA5Icon';
 export { SearchFA5Icon } from './SearchFA5Icon';
+export { HeadphonesAltFA5Icon } from './HeadphonesAltFA5Icon';
+export { MobileAltFA5Icon } from './MobileAltFA5Icon';
+export { LaptopFA5Icon } from './LaptopFA5Icon';
+export { DesktopFA5Icon } from './DesktopFA5Icon';
+export { TabletAltFA5Icon } from './TabletAltFA5Icon';
