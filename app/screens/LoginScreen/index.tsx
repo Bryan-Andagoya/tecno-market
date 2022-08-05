@@ -43,7 +43,7 @@ export const LoginScreen = () => {
   const passwordRef = useRef<Animatable.View & View>(null);
   const { loading, setLoading } = useContext(UserContext);
 
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+  const [_, response, promptAsync] = Google.useIdTokenAuthRequest({
     clientId: '777187985018-2in1d31nu67oeqgkd1hie2ksr9ddu7au.apps.googleusercontent.com',
   });
 

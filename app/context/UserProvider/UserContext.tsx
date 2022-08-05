@@ -2,7 +2,7 @@ import { createContext } from 'react';
 import { User } from 'firebase/auth';
 
 export interface UserContextValue {
-  user: User;
+  user: User | null;
   initializing: boolean;
   loading: boolean;
   setLoading: (payload: boolean) => void;

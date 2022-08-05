@@ -12,11 +12,11 @@ import { colors } from 'app/styles';
 import * as ImagePicker from 'expo-image-picker';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { storage } from 'app/config';
-import { updateProfile } from 'firebase/auth';
+import { updateProfile, User } from 'firebase/auth';
 
 export const DrawerContentComponent = (props: DrawerContentComponentProps) => {
   const { user } = useContext(UserContext);
-  const [userPhotoUri, setUserPhotoUri] = useState<string | null>(user.photoURL);
+  const [userPhotoUri, setUserPhotoUri] = useState<string | null>(user?.photoURL || null);
 
   const uploadUserPhoto = async () => {
     try {
@@ -42,15 +42,15 @@ export const DrawerContentComponent = (props: DrawerContentComponentProps) => {
           xhr.send(null);
         });
 
-        const storageRef = ref(storage, `images/user-profiles/${user.uid}.jpg`);
+        const storageRef = ref(storage, `images/user-profiles/${user?.uid}.jpg`);
 
         const { ref: imageRef } = await uploadBytes(storageRef, blob);
 
         const photoUri = await getDownloadURL(imageRef);
 
-        await updateProfile(user, { photoURL: photoUri });
+        await updateProfile(user || ({} as User), { photoURL: photoUri });
 
-        setUserPhotoUri(user.photoURL);
+        setUserPhotoUri(user?.photoURL || null);
       }
     } catch (error) {
       Alert.alert('¡Algo salió mal!', 'Error al cargar la imagen, intentelo más tarde');
@@ -71,7 +71,7 @@ export const DrawerContentComponent = (props: DrawerContentComponentProps) => {
           </TouchableOpacity>
         </View>
         <View>
-          <Text style={styles.userText}>{user.displayName || user.email}</Text>
+          <Text style={styles.userText}>{user?.displayName || user?.email || ''}</Text>
         </View>
       </View>
       <DrawerItemList {...props} />
